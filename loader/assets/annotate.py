@@ -1,4 +1,6 @@
 import os
+from typing import Any
+
 from lxml import etree  # ty: ignore[unresolved-import]
 
 import ui.log
@@ -6,7 +8,7 @@ import ui.log
 from loader.assets.utils import create_xml_parser
 
 
-def _require_element(parent: etree._Element | etree._ElementTree, path: str, context: str) -> etree._Element:
+def _require_element(parent: Any, path: str, context: str):
     found = parent.find(path)
     if found is None:
         raise ValueError(f"Missing {path} in {context}")
@@ -289,13 +291,13 @@ def annotate(corePath):
         languages = fragment.find("languages")
         if languages is not None:
             for lang in languages.findall("l"):
-                lang_name = lang.get("lang")
+                language_code = lang.get("lang")
                 f = lang.find("file")
                 if f is not None:
                     fid = f.get("fid")
                     if fid is not None and fid in gfilename and gfilename[fid] is not None:
                         lang.set("_annotation", gfilename[fid])
-                        if lang_name == "EN":
+                        if language_code == "EN":
                             fragment.set("_annotation", gfilename[fid])
 
     annotatedHavenPath = os.path.join(corePath, "library", "haven_annotated.xml")

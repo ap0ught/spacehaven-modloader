@@ -99,9 +99,7 @@ class ScrollableFrame(ttk.Frame):
 
 
 class Window(Frame):
-    def __init__(self, master=None):
-        if master is None:
-            raise ValueError("master is required")
+    def __init__(self, master: Tk):
         Frame.__init__(self, master)
         self.master = master
 
