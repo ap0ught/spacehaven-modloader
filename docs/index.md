@@ -28,8 +28,8 @@ The Space Haven Mod Loader makes it easy to install and manage mods for Space Ha
 
 ## Quick Links
 
-| | |
-|---|---|
+| Page | Description |
+|------|-------------|
 | [Getting Started]({% link getting-started.md %}) | Download, install, and run your first mod |
 | [Modding Guide]({% link modding-guide.md %}) | Create XML mods and understand the game library |
 | [Patch Operations]({% link patch-operations.md %}) | Reference for all supported patch operations |

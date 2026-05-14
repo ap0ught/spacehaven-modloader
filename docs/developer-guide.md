@@ -23,9 +23,8 @@ This guide explains how to set up a development environment to run the mod loade
 
 ## Prerequisites
 
-- **pyenv** (recommended) — install and manage Python versions: [https://github.com/pyenv/pyenv](https://github.com/pyenv/pyenv)
-- **Python 3.11.9** — the pinned version in `.python-version`
-- **pip** — Python package installer (bundled with Python)
+- **uv** — fast Python package manager: [https://docs.astral.sh/uv/](https://docs.astral.sh/uv/)
+- **Python 3.11.9** — managed automatically by uv (or via [pyenv](https://github.com/pyenv/pyenv))
 - **Git** — to clone the repository
 
 ---
@@ -53,27 +52,21 @@ pyenv install 3.11.9
 
 ## Setting Up a Virtual Environment
 
-Create and activate a Python virtual environment:
+Create and activate a Python virtual environment using uv:
 
 ```shell
-python -m venv venv
-source venv/bin/activate       # macOS / Linux
+uv venv
+source .venv/bin/activate       # macOS / Linux
 # or
-venv\Scripts\activate          # Windows (Command Prompt)
+.venv\Scripts\activate          # Windows (Command Prompt)
 # or
-venv\Scripts\Activate.ps1      # Windows (PowerShell)
+.venv\Scripts\Activate.ps1      # Windows (PowerShell)
 ```
 
 Install runtime dependencies:
 
 ```shell
-pip install -r requirements.txt
-```
-
-Install development dependencies:
-
-```shell
-pip install -r requirements-dev.txt
+uv pip install -r requirements.txt
 ```
 
 ---
@@ -89,8 +82,8 @@ python spacehaven-modloader.py
 You can also run without activating the environment:
 
 ```shell
-venv/bin/python spacehaven-modloader.py     # macOS / Linux
-venv\Scripts\python spacehaven-modloader.py # Windows
+.venv/bin/python spacehaven-modloader.py     # macOS / Linux
+.venv\Scripts\python spacehaven-modloader.py # Windows
 ```
 
 ---
@@ -105,7 +98,11 @@ python -m unittest discover tests
 
 ## Code Style
 
-The project uses [Black](https://black.readthedocs.io/) for formatting and [Flake8](https://flake8.pycqa.org/) for linting.
+The project uses [Black](https://black.readthedocs.io/) for formatting and [Flake8](https://flake8.pycqa.org/) for linting. Install them with:
+
+```shell
+uv pip install black flake8
+```
 
 Run the formatter:
 
@@ -129,7 +126,7 @@ Configuration is in `setup.cfg` and `.flake8`.
 
 ```powershell
 # Install dependencies
-pip install -r requirements.txt
+uv pip install -r requirements.txt
 
 # Build cx_Freeze executable
 python setup.py build
@@ -157,6 +154,15 @@ bash tools/build-macos.sh
 spacehaven-modloader/
 ├── spacehaven-modloader.py    Main entry point / UI
 ├── version.py                 Version string
+├── setup.py                   cx_Freeze build configuration
+├── generate_nsis_filelist.py  Generates NSIS installer file list
+├── installer_template.nsi     NSIS installer template
+├── modloader.spec             PyInstaller spec file
+├── requirements.txt           Pinned runtime dependencies
+├── requirements.in            Top-level dependency declarations
+├── textures_annotations.xml   Texture annotation data
+├── aspectj-1.9.19.jar         AspectJ compiler
+├── aspectjweaver-1.9.19.jar   AspectJ weaver agent
 ├── loader/
 │   ├── extract.py             Game asset extraction
 │   ├── load.py                Mod loading / unloading
@@ -188,7 +194,7 @@ The repository uses GitHub Actions for continuous integration and deployment:
 | Workflow | Trigger | Description |
 |----------|---------|-------------|
 | `build.yml` | Push to `master`, Release published | Builds the Windows installer and uploads to the release |
-| `pages.yml` | Push to `master` | Builds and deploys this documentation site to GitHub Pages |
+| `pages.yml` | Push to `master`, Pull request | Builds this documentation site; deploys to GitHub Pages on push to `master` |
 
 ---
 

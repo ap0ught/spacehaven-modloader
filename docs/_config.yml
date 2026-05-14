@@ -1,6 +1,6 @@
 title: Space Haven Mod Loader
 description: A modding tool for Space Haven by Bugbyte
-baseurl: "/spacehaven-modloader"
+baseurl: ""
 url: "https://ap0ught.github.io"
 
 theme: just-the-docs
@@ -21,9 +21,6 @@ nav_sort: order
 
 # Footer
 footer_content: 'Space Haven Mod Loader is an open-source project. <a href="https://github.com/ap0ught/spacehaven-modloader">View on GitHub</a>.'
-
-# Favicon
-favicon_ico: "/assets/images/favicon.ico"
 
 # Aux links (top right)
 aux_links:

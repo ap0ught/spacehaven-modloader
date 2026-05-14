@@ -72,7 +72,7 @@ nav_order: 6
 - Modders can create variables that are user-configurable
 - Variable values are saved at launch time
 - Variables can be reset to defaults
-- Example mods included: "Electric Slide", "Engine Tuner", and "Robot Work"
+- Example mods included: "Electric Slide", "Engine Tuner", and "Robot Work" (note: "Engine Tuner" and "Robot Work" were later removed in v0.12.0; only "Electric Slide" remains in `mods/`)
 - **Known issue:** Variables do not have UI validation
 - **Known issue:** All variables are a simple search-replace
 

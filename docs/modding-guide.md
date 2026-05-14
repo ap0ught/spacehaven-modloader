@@ -191,7 +191,7 @@ Add a `<config>` section to your `info.xml`:
 
 ### Using Variables in Patches
 
-Reference variable names in your patch `<value>` text. The loader substitutes values before applying:
+Reference the variable name **as a bare word** (no `${}` or other delimiters) anywhere in your patch `<value>`, `<enable>`, or `<disable>` text. The loader performs a plain string replacement before applying the patch:
 
 ```xml
 <Operation Class="AttributeSet">
@@ -200,6 +200,8 @@ Reference variable names in your patch `<value>` text. The loader substitutes va
   <value>CROP_SPEED</value>
 </Operation>
 ```
+
+At load time the literal text `CROP_SPEED` is replaced with the user-configured value (e.g. `2.0`), producing `<value>2.0</value>`.
 
 {: .warning }
 Variables are simple text substitutions. There is currently no UI validation of variable values.
