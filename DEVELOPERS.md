@@ -53,18 +53,30 @@ In the active environment, Install Python dependencies:
 pip install -r requirements.txt
 ```
 
-If developing, install development dependencies:
-```
-pip install -r requirements-dev.txt
-```
-
 
 ## Running the loader
 
 In the active environment, Run the loader:
 ```
-python spacehaven_modloader.py
+python spacehaven-modloader.py
 ```
 
 It is possible to avoid activating the virtual environment for future invocations by running the loader with the path
 to the Python interpreter in the virtual environment, e.g. `venv/bin/python` command.
+
+
+## Running tests
+
+```shell
+python -m unittest discover tests
+```
+
+
+## Code Style
+
+The project uses [Black](https://black.readthedocs.io/) for formatting and [Flake8](https://flake8.pycqa.org/) for linting (configured in `setup.cfg` and `.flake8`).
+
+```shell
+black .
+flake8 .
+```
