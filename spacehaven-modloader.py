@@ -31,7 +31,6 @@ from tkinter import (
     Entry,
     Frame,
     Label,
-    Misc,
     PanedWindow,
     PhotoImage,
     StringVar,
@@ -99,7 +98,9 @@ class ScrollableFrame(ttk.Frame):
 
 
 class Window(Frame):
-    def __init__(self, master: Tk):
+    def __init__(self, master: Tk | None = None):
+        if master is None:
+            raise ValueError("master is required")
         Frame.__init__(self, master)
         self.master = master
 
@@ -445,7 +446,7 @@ class Window(Frame):
         self.modDetailsDescription.insert(END, description)
         self.modDetailsDescription.config(state="disabled")
 
-    def create_ModConfigVariableEntry(self, configFrame: Misc, mod: ui.database.Mod, var: ui.database.ModConfigVar):
+    def create_ModConfigVariableEntry(self, configFrame: Frame | ttk.Frame, mod: ui.database.Mod, var: ui.database.ModConfigVar):
         # TODO: Maybe change this to use grid instead of pack for better presentation?
         valFrame = Frame(configFrame)
         # label for variable description
