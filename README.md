@@ -2,9 +2,11 @@
 
 This is a modding tool for [Space Haven by Bugbyte](http://bugbyte.fi/spacehaven/), a spaceship colony sim.
 
+📖 **[Full documentation on GitHub Pages](https://ap0ught.github.io/spacehaven-modloader/)**
+
 ## Getting Started
 
-Download the [latest release](https://github.com/Spacehaven-modding-tools/spacehaven-modloader/releases) and fire it up.
+Download the [latest release](https://github.com/ap0ught/spacehaven-modloader/releases) and fire it up.
 
 ![Screenshot](/tools/screenshot.png?raw=true)
 
@@ -50,7 +52,7 @@ Running the game from the modloader will not load your cloud credentials correct
 There are two types of mods supported by the modloader. These are XML mods, which are used to create new buildings, and code injection mods that can alter game functionality. Info on both types of mods is below.
 
 ### Code Injection Mods
-These mods use AspectJ (similar to Harmony in C#) to allow you to inject code before, after, and around the game's existing functions, method calls, and field accesses. This functionality makes code injection mods extremely poewrful, but they require programming knowledge (or patience and a willingness to learn) to create. You'll also want a tool that allows you to decompile `spacehaven.jar`. I recommend [JD GUI](https://github.com/java-decompiler/jd-gui) as it seemed to work the best out of the few options I tried. The game's code is not obfuscated, so the decompilation process is relatively painless. 
+These mods use AspectJ (similar to Harmony in C#) to allow you to inject code before, after, and around the game's existing functions, method calls, and field accesses. This functionality makes code injection mods extremely powerful, but they require programming knowledge (or patience and a willingness to learn) to create. You'll also want a tool that allows you to decompile `spacehaven.jar`. I recommend [JD GUI](https://github.com/java-decompiler/jd-gui) as it seemed to work the best out of the few options I tried. The game's code is not obfuscated, so the decompilation process is relatively painless. 
 
 There's a [template repo](https://github.com/Spacehaven-modding-tools/SpaceHavenModTemplate) that you can use as a basis for creating your own code injection mod. The template repo includes instructions on how to set up your dev environment as well as some basic sample mods.
 
