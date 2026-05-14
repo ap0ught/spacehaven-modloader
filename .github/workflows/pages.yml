@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+    # Paths filters must be repeated per trigger type in GitHub Actions YAML
     paths:
       - "docs/**"
       - ".github/workflows/pages.yml"
