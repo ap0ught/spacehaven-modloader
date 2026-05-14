@@ -47,5 +47,5 @@ The Space Haven Mod Loader makes it easy to install and manage mods for Space Ha
 ## Community
 
 - Mods can be found on [NexusMods](https://www.nexusmods.com/spacehaven)
-- Code injection mod template: [SpaceHavenModTemplate](https://github.com/Spacehaven-modding-tools/SpaceHavenModTemplate)
+- Code injection mod template: [SpaceHavenModTemplate](https://github.com/ap0ught/SpaceHavenModTemplate)
 - Report bugs and request features on [GitHub Issues](https://github.com/ap0ught/spacehaven-modloader/issues)
