@@ -1,8 +1,11 @@
+from __future__ import annotations
+
 import copy
 
-import lxml.etree
+import lxml.etree  # ty: ignore[unresolved-import]
 import ui.log
 import re
+import ui.database
 
 
 def AttributeSet(patchArgs):
@@ -241,7 +244,7 @@ def PatchDispatch(patchType):
     return patchDispatcher.get(patchType, BadOp)
 
 
-def doPatchType(coreLib, mod: dict, patch: lxml.etree._Element, location: str):
+def doPatchType(coreLib, mod: ui.database.Mod, patch: lxml.etree._Element, location: str):
     """Execute a single patch. Provided to reduce indentation level"""
 
     patchType = patch.attrib["Class"]
@@ -320,7 +323,7 @@ def doPatchType(coreLib, mod: dict, patch: lxml.etree._Element, location: str):
         PatchDispatch(patchType)(patchArgs)
         log.append("      result:     OK")
 
-    except:
+    except Exception:
         log.append("      result:     ERROR <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
         raise
 
@@ -329,7 +332,7 @@ def doPatchType(coreLib, mod: dict, patch: lxml.etree._Element, location: str):
             ui.log.log(line)
 
 
-def doPatches(coreLib, modLib, mod: dict):
+def doPatches(coreLib, modLib, mod: ui.database.Mod):
 
     # Execution
     for location in modLib:

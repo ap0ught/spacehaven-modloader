@@ -4,10 +4,44 @@ import os
 import platform
 import threading
 import traceback
-import vdf
+import vdf  # ty: ignore[unresolved-import]
 from pathlib import Path, PurePath
-from tkinter import *
-from tkinter import filedialog, messagebox, ttk, font, scrolledtext
+from tkinter import (
+    BOTH,
+    DISABLED,
+    END,
+    GROOVE,
+    HORIZONTAL,
+    LEFT,
+    NE,
+    NORMAL,
+    NW,
+    RIGHT,
+    S,
+    SINGLE,
+    SOLID,
+    TOP,
+    TRUE,
+    VERTICAL,
+    WORD,
+    X,
+    Button,
+    Canvas,
+    Checkbutton,
+    Entry,
+    Frame,
+    Label,
+    Misc,
+    PanedWindow,
+    PhotoImage,
+    StringVar,
+    Tk,
+    filedialog,
+    font,
+    messagebox,
+    scrolledtext,
+    ttk,
+)
 
 # from steamfiles import acf
 
@@ -66,6 +100,8 @@ class ScrollableFrame(ttk.Frame):
 
 class Window(Frame):
     def __init__(self, master=None):
+        if master is None:
+            raise ValueError("master is required")
         Frame.__init__(self, master)
         self.master = master
 
@@ -198,7 +234,7 @@ class Window(Frame):
 
     def autolocateSpacehaven(self):
         self.gamePath = None
-        self.workshopPath: str = None
+        self.workshopPath: str | None = None
         self.jarPath = None
         self.modPath = None
 
@@ -221,7 +257,7 @@ class Window(Frame):
                 import winreg
 
                 registry_path = "SOFTWARE\\WOW6432Node\\Valve\\Steam" if (platform.architecture()[0] == "64bit") else "SOFTWARE\\Valve\\Steam"
-                steam_path = winreg.QueryValueEx(winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, registry_path), "InstallPath")[0]
+                steam_path = winreg.QueryValueEx(winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, registry_path), "InstallPath")[0]  # ty: ignore[unresolved-attribute]
                 game_executable += ".exe"
             if platform.system() == "Linux":
                 steam_path = Path(Path.home(), ".steam", "steam")
@@ -248,7 +284,7 @@ class Window(Frame):
                 if os.path.exists(location):
                     self.locateSpacehaven(location)
                     return
-            except:
+            except Exception:
                 pass
         ui.log.log("Unable to autolocate installation. User will need to pick manually.")
 
@@ -297,9 +333,7 @@ class Window(Frame):
         self.spacehavenText.delete(0, "end")
         self.spacehavenText.insert(0, self.gamePath)
 
-        self.modPath = [
-            self.modPath
-        ]
+        self.modPath = [self.modPath]
 
         if workshop_path.exists():
             self.modPath.append(self.workshopPath)
@@ -309,7 +343,7 @@ class Window(Frame):
                 for mod_path in f.read().split("\n"):
                     if mod_path.strip():
                         self.modPath.append(mod_path.strip())
-        except:
+        except Exception:
             pass
 
         DatabaseHandler(self.modPath, self.gameInfo)
@@ -349,7 +383,7 @@ class Window(Frame):
         try:
             # might fail at init time
             previously_selected = self.selected_mod()
-        except:
+        except Exception:
             previously_selected = None
             pass
         self.modList.delete(0, END)
@@ -413,7 +447,7 @@ class Window(Frame):
         self.modDetailsDescription.insert(END, description)
         self.modDetailsDescription.config(state="disabled")
 
-    def create_ModConfigVariableEntry(self, configFrame: Frame, mod: ui.database.Mod, var: ui.database.ModConfigVar):
+    def create_ModConfigVariableEntry(self, configFrame: Misc, mod: ui.database.Mod, var: ui.database.ModConfigVar):
         # TODO: Maybe change this to use grid instead of pack for better presentation?
         valFrame = Frame(configFrame)
         # label for variable description
@@ -457,7 +491,7 @@ class Window(Frame):
     def update_mod_config_ui(self, mod: ui.database.Mod):
         try:
             self.modConfigFrame.destroy()
-        except:
+        except Exception:
             pass
 
         try:
@@ -465,7 +499,7 @@ class Window(Frame):
                 self.modConfigFrame = ScrollableFrame(self.modDetailsWindow)
             else:
                 return
-        except:
+        except Exception:
             return
 
         # Reset button at top.
@@ -502,7 +536,8 @@ class Window(Frame):
         self.update_description(error)
 
     def openModFolder(self):
-        ui.launcher.open(self.modPath[0])
+        if self.modPath:
+            ui.launcher.open(self.modPath[0])
 
     def set_ui_state(self, state, message):
         self.launchButton.config(state=state, text=message)
@@ -561,7 +596,8 @@ class Window(Frame):
 
         self.launchButton.config(text=extra_label + " " + ui.log.logger.backgroundState + " " + extra_label)
         if self.background_finished:
-            self.background_thread.join()
+            if self.background_thread is not None:
+                self.background_thread.join()
             self.background_thread = None
             self.enable_UI(self.launchButton_default_text)
             self.check_quick_launch()
@@ -569,6 +605,8 @@ class Window(Frame):
             self.after(self.background_refresh_delay, self.update_background_state)
 
     def _core_extract_path(self):
+        if not self.modPath:
+            raise RuntimeError("Mods path is not configured")
         return os.path.join(self.modPath[0], "spacehaven_" + self.gameInfo.version)
 
     def extract_assets(self):
@@ -623,7 +661,7 @@ class Window(Frame):
     def clear_quick_launch(self):
         try:
             os.unlink(loader.load.quick_launch_filename(self.current_mods_signature()))
-        except:
+        except Exception:
             pass
         self.check_quick_launch()
 
@@ -649,7 +687,7 @@ class Window(Frame):
             ui.launcher.launchAndWait(self.gamePath)
             # FIXME this will crash if the game restarts by itself (changing language)
             loader.load.unload(self.jarPath)
-        except:
+        except Exception:
             import traceback
 
             traceback.print_exc()
@@ -680,7 +718,7 @@ class Window(Frame):
             loader.load.load(self.jarPath, xmlMods, self.current_mods_signature())
             ui.launcher.launchAndWait(self.gamePath)
             loader.load.unload(self.jarPath)
-        except:
+        except Exception:
             import traceback
 
             traceback.print_exc()
@@ -722,12 +760,12 @@ if __name__ == "__main__":
     icon = None
     try:
         icon = PhotoImage(file="spacehaven-modloader.png")
-    except:
+    except Exception:
         pass
     if icon is None:
         try:
             icon = PhotoImage(file="./_internal/spacehaven-modloader.png")
-        except:
+        except Exception:
             pass
     if icon is not None:
         root.iconphoto(True, icon)

@@ -1,5 +1,5 @@
 import os
-import zipfile39
+import zipfile39  # ty: ignore[unresolved-import]
 import ui.log
 
 PATCHABLE_XML_FILES = [

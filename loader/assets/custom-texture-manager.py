@@ -1,8 +1,8 @@
 import math
-import lxml.etree
-import png
+import lxml.etree  # ty: ignore[unresolved-import]
+import png  # ty: ignore[unresolved-import]
 import os
-import rectpack
+import rectpack  # ty: ignore[unresolved-import]
 
 
 class TextureManager:

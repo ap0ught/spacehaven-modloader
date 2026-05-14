@@ -1,5 +1,5 @@
 import sys
-from cx_Freeze import setup, Executable
+from cx_Freeze import Executable, setup  # ty: ignore[unresolved-import]
 import version
 
 build_exe_options = {

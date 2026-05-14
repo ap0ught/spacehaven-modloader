@@ -5,6 +5,7 @@ import os
 import sys
 from xml.etree import ElementTree
 import json
+from typing import Any
 from packaging.version import Version
 
 import version
@@ -139,7 +140,7 @@ class ModDatabase:
         return cls.getInstance().mods
 
     @classmethod
-    def getMod(cls, modPath) -> Mod:
+    def getMod(cls, modPath) -> Mod | None:
         """Get a specific mod from its installation path."""
         for mod in cls.getInstance().mods:
             if mod.path == modPath:
@@ -157,6 +158,7 @@ class ModConfigVar:
     """An individual user configurable variable.  Presently a simple string search-replace. Designed to support more advanced features."""
 
     def __init__(self, XML: ElementTree.Element):
+        self.ui_stringvar: Any | None = None
         self.loadXml(
             XML.get("name"),  # Internal Name, used in search-replace of the XML.
             XML.text,  # Description shown in UI to user.
@@ -170,11 +172,11 @@ class ModConfigVar:
 
     # Clean entry for different value types.
     # TODO: fully implement and enforce.
-    def _cleanValue(self, val: any):
+    def _cleanValue(self, val: Any) -> Any:
         if not self.type:
             self.type = "str"
         type_name = self.type.strip().lower()
-        v: any = val
+        v: Any = val
         try:
             # Be very generous on string type.
             if type_name is None or type_name == "" or type_name.startswith("str") or type_name.startswith("text") or type_name.startswith("txt"):
@@ -193,21 +195,21 @@ class ModConfigVar:
                     v = True
                 else:
                     v = False
-        except:
+        except Exception:
             return None
 
         return v
 
-    def loadXml(self, name: str, desc: str, data_type: str, size, min, max, default, value):
-        self.name: str = name
-        self.desc: str = desc
-        self.type: str = data_type
+    def loadXml(self, name: str | None, desc: str | None, data_type: str | None, size, min, max, default, value):
+        self.name: str = name or ""
+        self.desc: str = desc or ""
+        self.type: str | None = data_type
 
-        self.min: float = float(min) if min else None
-        self.max: float = float(max) if max else None
-        self.size: int = int(size) if size else None
-        self.default: str = str(default) if default else None
-        self.value: str = self._cleanValue(value)
+        self.min: float | None = float(min) if min else None
+        self.max: float | None = float(max) if max else None
+        self.size: int | None = int(size) if size else None
+        self.default: str | None = str(default) if default else None
+        self.value: Any = self._cleanValue(value)
         if self.value is None:
             self.value = value = self.default
 
@@ -228,11 +230,12 @@ class Mod:
         self.author = ""
         self.website = ""
         self.updates = ""
-        self.prefix = ""
+        self.prefix = 0
         self.gameInfo = gameInfo
         self._mappedIDs = []
         self.enabled = not os.path.isfile(os.path.join(self.path, DISABLED_MARKER))
-        self.variables: dict = {}
+        self.variables: list[ModConfigVar] = []
+        self.display_idx = -1
         self.info_file = info_file
         self.loadInfo(info_file)
         self.known_issues = ""
@@ -251,7 +254,7 @@ class Mod:
         def _optional(tag):
             try:
                 return _sanitize(mod.find(tag))
-            except:
+            except Exception:
                 return ""
 
         try:
@@ -274,7 +277,6 @@ class Mod:
             if self.config_xml:
                 all_var = self.config_xml.findall("var")
                 if all_var and len(all_var) > 0:
-                    self.variables = []
                     for var in all_var:
                         confVar = ModConfigVar(var)
                         if confVar:
@@ -308,7 +310,7 @@ class Mod:
         try:
             os.unlink(os.path.join(self.path, DISABLED_MARKER))
             self.enabled = True
-        except:
+        except Exception:
             pass
 
     def disable(self):

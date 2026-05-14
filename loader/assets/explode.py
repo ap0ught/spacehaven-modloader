@@ -4,8 +4,8 @@ import os
 import struct
 import zlib
 
-import lxml.etree
-import png
+import lxml.etree  # ty: ignore[unresolved-import]
+import png  # ty: ignore[unresolved-import]
 import ui.log
 
 from loader.assets.utils import create_xml_parser

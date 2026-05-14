@@ -3,9 +3,9 @@ import os
 from pathlib import Path
 import shutil
 
-import lxml.etree
-import png
-import rectpack
+import lxml.etree  # ty: ignore[unresolved-import]
+import png  # ty: ignore[unresolved-import]
+import rectpack  # ty: ignore[unresolved-import]
 import ui.database
 import ui.log
 
@@ -127,7 +127,10 @@ def _detect_textures(coreLibrary, modLibrary, mod):
         regionsNode = textures_mod.find(".//regions")
         texturesNode = textures_mod.find(".//textures")
 
-        textureID: int = ui.database.ModDatabase.getMod(mod).prefix
+        mod_info = ui.database.ModDatabase.getMod(mod)
+        if mod_info is None:
+            raise ValueError(f"Unable to resolve mod info for {mod}")
+        textureID = mod_info.prefix
 
         # Catch missing Modder ID.  Still try to process and move forward.
         if not textureID or textureID <= 0:
@@ -536,7 +539,7 @@ def mergeDefinitions(baseLibrary, modLibrary, file, xpath, idAttribute):
     for mod_xml in modLibrary[file]:
         try:
             modRoot = mod_xml.xpath(xpath)[0]
-        except:
+        except Exception:
             continue
 
         merged = 0
